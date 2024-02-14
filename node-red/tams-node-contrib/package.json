@@ -1,0 +1,24 @@
+{
+  "name": "tams-node-contrib",
+  "version": "1.0.9",
+  "description": "Provides a set of nodes to Node-RED to help control tams.",
+  "dependencies": {
+    "async": "^3.2.5",
+    "ioredis": "^4.28.5"
+  },
+  "keywords": [
+    "node-red"
+  ],
+  "main": "order.js",
+  "node-red": {
+    "nodes": {
+      "order": "order.js"
+    },
+    "version": ">=2.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hahm ji min",
+  "license": "Tams"
+}

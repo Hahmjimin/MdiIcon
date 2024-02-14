@@ -1,0 +1,279 @@
+<script type="text/javascript">
+  "use strict";
+  /*global RED*/
+  RED.nodes.registerType("order-config", {
+    category: "config",
+    defaults: {
+      name: {
+        value: "Local",
+        required: true,
+      },
+      options: {
+        value: "{}",
+        required: true,
+        validate: RED.validators.typedInput("optionsType"),
+      },
+      optionsType: { value: "json" },
+    },
+    label: function () {
+      return this.name || "Redis host";
+    },
+    oneditprepare: function () {
+      $("#node-config-input-options").typedInput({
+        default: "str",
+        typeField: "#node-config-input-optionsType",
+        types: ["str", "env", "json", "jsonata"],
+      });
+    },
+  });
+</script>
+
+<script type="text/x-red" data-template-name="order-config">
+  <div class="form-row">
+      <label for="node-config-input-name"><i class="fa fa-server"></i> Name</label>
+      <input type="text" id="node-config-input-name">
+  </div>
+  <div class="form-row">
+      <label for="node-config-input-options"><i class="fa fa-random"></i> Options</label>
+      <input type="text" id="node-config-input-options">
+      <input type="hidden" id="node-config-input-optionsType">
+  </div>
+</script>
+
+<script type="text/javascript">
+  /*global RED*/
+  RED.nodes.registerType("order in", {
+    category: "TAMS",
+    inputs: 0,
+    outputs: 1,
+    color: "#ffffff",
+    icon: "mobyus.svg",
+    paletteLabel: "order in",
+    defaults: {
+      server: {
+        value: "",
+        type: "order-config",
+      },
+      command: {
+        value: "subscribe",
+      },
+      name: {
+        value: "",
+      },
+      topic: {
+        value: "",
+        required: true,
+      },
+      obj: {
+        value: true,
+      },
+      timeout: {
+        value: 0,
+        validate: RED.validators.number(),
+      },
+    },
+    label: function () {
+      return this.name || this.topic || "order in";
+    },
+  });
+</script>
+
+<script type="text/x-red" data-template-name="order in">
+  <div class="form-row">
+      <label for="node-input-server"><i class="fa fa-globe"></i> Tiu</label>
+      <input type="text" id="node-input-server" placeholder="Server">
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+      <label for="node-input-topic"><i class="icon-tasks"></i> Topic</label>
+      <input type="text" id="node-input-topic" placeholder="Topic">
+  </div>
+  <div class="form-row">
+      <label for="node-input-command"><i class="fa fa-unlock"></i> Method</label>
+      <select id="node-input-command">
+          <option value="subscribe">SUBSCRIBE</option>
+      </select>
+  </div>
+  <div class="form-row">
+      <label for="node-input-timeout"><i class="fa fa-clock-o"></i> Timeout</label>
+      <input type="text" id="node-input-timeout" placeholder="Timeout">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="order in">
+  <p>order in</p>
+  <p>Acts as SUBSCRIBE</p>
+  <p>The msg.topic is pattern on all methods, separated by spaces.</p>
+</script>
+
+<script type="text/javascript">
+  /*global RED*/
+  RED.nodes.registerType("order out", {
+    category: "TAMS",
+    inputs: 1,
+    outputs: 0,
+    color: "#ffffff",
+    icon: "mobyus.svg",
+    align: "right",
+    paletteLabel: "order out",
+    defaults: {
+      server: {
+        value: "",
+        type: "order-config",
+      },
+      command: {
+        value: "publish",
+      },
+      name: {
+        value: "",
+      },
+      topic: {
+        value: "",
+      },
+      obj: {
+        value: true,
+      },
+      
+      // Tams Parameter
+      EventId: {
+        value: "30001"
+      },
+      Source: {
+        value: ""
+      },
+      Dest: {
+        value: ""
+      },
+      RecvChannel: {
+        value: ""
+      },
+      RecvId: {
+        value: "40001"
+      },
+      OrderType: {
+        value: ""
+      },
+      WorkZoneCode: {
+        value: ""
+      },
+      Policy: {
+        value: ""
+      },
+      SourcePolicy: {
+        value: ""
+      },
+      DestPolicy: {
+        value: ""
+      },
+      ResourceNum: {
+        value: ""
+      },
+      Priority1: {
+        value: ""
+      },
+      Priority2: {
+        value: ""
+      },
+      WayPoint: {
+        value: ""
+      },
+      Sender: {
+        value: "IoT G/W"
+      },
+      Item: {
+        value: ""
+      },
+    },
+    label: function () {
+      return this.name || this.topic || "order out";
+    },
+  });
+</script>
+
+<script type="text/x-red" data-template-name="order out">
+  <div class="form-row">
+      <label for="node-input-server"><i class="fa fa-globe"></i> Tiu</label>
+      <input type="text" id="node-input-server" placeholder="Server">
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+      <label for="node-input-topic"><i class="icon-tasks"></i> Topic</label>
+      <input type="text" id="node-input-topic" placeholder="Topic">
+  </div>
+  <div class="form-row">
+      <label for="node-input-command"><i class="fa fa-unlock"></i> Method</label>
+      <select id="node-input-command">
+          <option value="publish">PUBLISH</option>
+      </select>
+  </div>
+
+  <!-- TAMS Parameter -->
+  <div class="form-row">
+    <label for="node-input-Source"><i class="icon-tag"></i> 출발지</label>
+    <input type="number" id="node-input-Source" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-Dest"><i class="icon-tag"></i> 도착지</label>
+    <input type="number" id="node-input-Dest" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-RecvChannel"><i class="icon-tag"></i> 수신 채널</label>
+    <input type="text" id="node-input-RecvChannel" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-OrderType"><i class="icon-tag"></i> 오더타입</label>
+    <input type="text" id="node-input-OrderType" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-WorkZoneCode"><i class="icon-tag"></i> 오더워크존</label>
+    <input type="text" id="node-input-WorkZoneCode" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-Policy"><i class="icon-tag"></i> 정책</label>
+    <input type="text" id="node-input-Policy" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-SourcePolicy"><i class="icon-tag"></i> 출발지 정책</label>
+    <input type="text" id="node-input-SourcePolicy" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-DestPolicy"><i class="icon-tag"></i> 도착지 정책</label>
+    <input type="text" id="node-input-DestPolicy" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-ResourceNum"><i class="icon-tag"></i> 자원 ID</label>
+    <input type="number" id="node-input-ResourceNum" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-Priority1"><i class="icon-tag"></i> 우선순위1</label>
+    <input type="number" id="node-input-Priority1" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-Priority2"><i class="icon-tag"></i> 우선순위2</label>
+    <input type="number" id="node-input-Priority2" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-WayPoint"><i class="icon-tag"></i> 경유지</label>
+    <input type="number" id="node-input-WayPoint" placeholder="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-Item"><i class="icon-tag"></i> Item</label>
+    <input type="text" id="node-input-Item" placeholder="">
+  </div>
+  <div>
+     &nbsp;
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="order out">
+  <p>order out</p>
+  <p>Acts as PUBLISH</p>
+  <p>The msg.topic is key name to publish.</p>
+  <p>Note: Output only works on PUBLISH and return number of subscribers.</p>
+</script>
