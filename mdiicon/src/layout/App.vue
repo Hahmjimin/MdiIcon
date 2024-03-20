@@ -50,18 +50,45 @@
           </svg>
         </div>
       </a>
-    </header>
-    <div class="side-bar">
-    </div>
-    <div class="container">
-      <!-- <div v-for="(icon, index) in icons" :key="index" class="icon-container">
-        <svg :class="iconClass" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path :d="icon" />
-        </svg>
-      </div> -->
-      <div v-for="icon in icons" :key="icon.name" class="icon">
-        {{ icon.name }}: {{ icon.value }}
+      <div class="tab">
+        <a class="i/f" href="https://pictogrammers.com/libraries/">
+          <h7>Icon & Fonts</h7>
+        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="docs" href="https://pictogrammers.com/docs/">
+          <h7>Docs</h7>
+        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="tools" href="https://pictogrammers.com/tools/">
+          <h7>Tools</h7>
+        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="about" href="https://pictogrammers.com/docs/general/about/">
+          <h7>About</h7>
+        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="contri" href="https://pictogrammers.com/docs/contribute/">
+          <h7>Contribute</h7>
+        </a>
       </div>
+    </header>
+    <div class="board">
+      <div class="nav">
+        <div class="nav-top">
+          <img alt="Material Design Icons" width="38" height="38" class="image-blur-svg"
+            src="https://pictogrammers.com/images/libraries/mdi.svg">
+        </div>
+        <div class="nav-bottom">
+          <input id="searchInput" placeholder="Search 7447 Icons..." type="text" class="search-input"
+            v-model="searchText">
+        </div>
+      </div>
+      <!--///////////////////// icon 가져오는 코드 ///////////////////////-->
+      <div class="container">
+        <div v-for="icon in filteredIcons" :key="icon.name" class="icon">
+          <svg role="presentation" :class="iconClass" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path :d="icon.value"></path>
+          </svg>
+          <span>{{ icon.name }}</span>
+        </div>
+      </div>
+      <!--////////////////////////////////////////////////////////////-->
     </div>
     <footer class="Footer">
       <div class="logo_p">
@@ -106,6 +133,7 @@
       <div class="description">
         <div class="desc">
           <h6>Open-source iconography for designers and developers</h6>
+          <p></p><br>
           <p></p>
         </div>
         <div class="link">
@@ -136,40 +164,40 @@
   </div>
 </template>
 
-<!-- <script setup>
-// import * as mdiIcons from '@mdi/font';
-
-// const icons = Object.values(mdiIcons);
-// const iconClass = 'icon';
-
-import mdiIcons from '@/assets/config.json';
-
-// 필요한 경우 개별 아이콘에 접근할 수 있습니다.
-mdiIcons.forEach(icon => {
-  console.log(`Icon name: ${icon.name}`);
-  console.log(`Icon value: ${icon.value}`);
-});
-
-</script> -->
-
+<!--////////////////// icon 가져오는 코드 / 검색 /////////////////////////-->
 <script setup>
 import mdiIcons from '/config.json';
+import { ref, computed } from 'vue';
 
 // icons 속성 정의
 const icons = mdiIcons;
 
-</script>
+// 검색어 상태
+const searchText = ref('');
 
+// 검색된 아이콘 계산된 속성
+const filteredIcons = computed(() => {
+  const lowercaseSearchText = searchText.value.toLowerCase();
+  return icons.filter(icon => icon.name.toLowerCase().includes(lowercaseSearchText));
+});
+
+// 아이콘 클래스 계산된 속성 (필요에 따라 추가)
+const iconClass = '';
+</script>
+<!--///////////////////////////////////////////////////////////////////-->
 
 <style scoped>
-/* .page-content {
+.page-content {
   padding: 20px;
-} */
+  background-color: #9DD8EA;
+  width: 100%;
+  height: 100%;
+}
+
 .Header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 20px 40px;
+  /* padding: 20px 40px; */
 }
 
 .Header_logo {
@@ -190,43 +218,56 @@ const icons = mdiIcons;
   margin-left: -8px;
 }
 
-.container {
-  display: inline-block;
-  width: 70%;
-  height: 100%;
+.tab {
+  color: #300056;
+  font-size: 17px;
 }
 
-.icon-container {
+a {
+  text-decoration-line: none;
+}
+
+.search {
+  width: 250px;
+  height: 40px;
+  border-radius: 3px;
+  background-color: white;
+}
+
+.board {
+  background-color: white;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.nav {
+  background-color: #E7F5F9;
+  border-radius: 5px;
+  width: 100%;
+  height: 100px;
+}
+
+.toggle {
+  p {
+    font-size: 1.2rem;
+  }
+}
+
+.container {
+  width: 100%;
+}
+
+.icon {
   display: inline-block;
   width: calc(100% / 7);
-  padding: 5px;
-  box-sizing: border-box;
+  padding: 35px;
+  background-color: white;
 }
 
-.Footer {
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-  padding: 20px 40px;
-}
-
-.Footer .logo_p {
+.logo_p {
   width: 35px;
-  height: 35px;
-  margin-right: 10px;
-}
-
-.desc {
-  display: block;
-  width: 50%;
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-.link {
-  display: block;
-  width: 50%;
-  padding: 5px;
-  box-sizing: border-box;
+  height: 40px;
 }
 </style>
